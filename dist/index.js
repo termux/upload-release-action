@@ -211,6 +211,7 @@ function run() {
             const release_name = core.getInput('release_name');
             const body = core.getInput('body');
             const checksums_algos = core.getInput('checksums').split(',');
+            const checksums_file_name = core.getInput('checksums_file_name') || 'CHECKSUMS-%algo%.txt';
             const checksums = {};
             // Make sure all checksums_algos are available
             const availableHashes = (0, crypto_1.getHashes)();
@@ -253,7 +254,7 @@ function run() {
                 const asset_download_url = yield (0, uploadToRelease_1.default)(release, file_name, asset_name, tag, overwrite, octokit, assets, checksums_algos, checksums);
                 core.setOutput('browser_download_urls', [asset_download_url]);
             }
-            (0, uploadChecksums_1.default)(checksums, checksums_algos, release, tag, octokit);
+            (0, uploadChecksums_1.default)(checksums, checksums_algos, checksums_file_name, release, tag, octokit);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         }
         catch (error) {
@@ -273,12 +274,12 @@ run();
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const uploadToRelease_1 = __nccwpck_require__(2126);
-function uploadChecksums(checksums, algos, release, tag, octokit) {
+function uploadChecksums(checksums, algos, checksums_file_name, release, tag, octokit) {
     for (const algo of algos) {
         let checksumsFileContent = '';
-        const checksumsFileName = 'CHECKSUMS-' + algo + '.txt';
+        const checksumsFileName = checksums_file_name.replace('%algo%', algo);
         for (const file of Object.keys(checksums)) {
-            checksumsFileContent += `${file}\t${checksums[file][algo]}\n`;
+            checksumsFileContent += `${checksums[file][algo]}\t${file}\n`;
         }
         (0, uploadToRelease_1.uploadFile)(release, checksumsFileName, Buffer.from(checksumsFileContent), checksumsFileContent.length, checksumsFileName, tag, octokit);
     }
@@ -355,7 +356,7 @@ function uploadToRelease(release, file, asset_name, tag, overwrite, octokit, ass
         const file_size = stat.size;
         const file_bytes = (0, fs_1.readFileSync)(file);
         const checksum = (0, calculateChecksum_1.default)(file_bytes, checksum_algos);
-        checksums[file] = checksum;
+        checksums[asset_name] = checksum;
         // Check for duplicates
         const duplicate_asset = assets.find(a => a.name === asset_name);
         if (duplicate_asset !== undefined) {
@@ -5372,6 +5373,12 @@ function setopts (self, pattern, options) {
     pattern = "**/" + pattern
   }
 
+  self.windowsPathsNoEscape = !!options.windowsPathsNoEscape ||
+    options.allowWindowsEscape === false
+  if (self.windowsPathsNoEscape) {
+    pattern = pattern.replace(/\\/g, '/')
+  }
+
   self.silent = !!options.silent
   self.pattern = pattern
   self.strict = options.strict !== false
@@ -5427,8 +5434,6 @@ function setopts (self, pattern, options) {
   // Note that they are not supported in Glob itself anyway.
   options.nonegate = true
   options.nocomment = true
-  // always treat \ in patterns as escapes, not path separators
-  options.allowWindowsEscape = true
 
   self.minimatch = new Minimatch(pattern, options)
   self.options = self.minimatch.options
