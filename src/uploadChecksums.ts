@@ -13,7 +13,7 @@ export default function uploadChecksums(
     let checksumsFileContent = '';
     const checksumsFileName = 'CHECKSUMS-' + algo + '.txt';
     for (const file of Object.keys(checksums)) {
-      checksumsFileContent += `${file}\t${checksums[file][algo]}\n`;
+      checksumsFileContent += `${checksums[file][algo]}\t${file}\n`;
     }
     uploadFile(
       release,

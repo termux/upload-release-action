@@ -1,5 +1,19 @@
 # Changelog
 
+## [5.0.0] - STAGING
+- BREAKING: Generate checksum files similar to GNU Coreutils. This allows GNU's `sha256sum -c <checksums-file>` to be used along with `md5sum -c <checksums-file>`, and so on.
+Earlier format:
+```
+file1.txt	xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+file2.txt	xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+...
+```
+New format:
+```
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx	file1.txt
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx	file2.txt
+```
+
 ## [4.1.0] - 2023-01-DD
 - Add support for generating checksums automatically
 
