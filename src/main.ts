@@ -26,6 +26,8 @@ async function run(): Promise<void> {
     const release_name = core.getInput('release_name');
     const body = core.getInput('body');
     const checksums_algos = core.getInput('checksums').split(',');
+    const checksums_file_name =
+      core.getInput('checksums_file_name') || 'CHECKSUMS-%algo%.txt';
     const checksums: Checksums = {};
 
     // Make sure all checksums_algos are available
@@ -104,7 +106,14 @@ async function run(): Promise<void> {
       );
       core.setOutput('browser_download_urls', [asset_download_url]);
     }
-    uploadChecksums(checksums, checksums_algos, release, tag, octokit);
+    uploadChecksums(
+      checksums,
+      checksums_algos,
+      checksums_file_name,
+      release,
+      tag,
+      octokit
+    );
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

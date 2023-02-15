@@ -5,13 +5,14 @@ import {uploadFile} from './uploadToRelease';
 export default function uploadChecksums(
   checksums: Checksums,
   algos: string[],
+  checksums_file_name: string,
   release: ReleaseByTagResp | CreateReleaseResp,
   tag: string,
   octokit: InstanceType<typeof GitHub>
 ): void {
   for (const algo of algos) {
     let checksumsFileContent = '';
-    const checksumsFileName = 'CHECKSUMS-' + algo + '.txt';
+    const checksumsFileName = checksums_file_name.replace('%algo%', algo);
     for (const file of Object.keys(checksums)) {
       checksumsFileContent += `${checksums[file][algo]}\t${file}\n`;
     }

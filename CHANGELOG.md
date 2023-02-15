@@ -25,6 +25,7 @@ Now:
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx	file.txt
 ...
 ```
+- feat: Allow setting checksums file name using `checksums_file_name` input. The variable optionally supports `%algo%` which will be replaced with the respective algorithm.
 
 ## [4.1.0] - 2023-01-DD
 - Add support for generating checksums automatically
