@@ -13,6 +13,18 @@ New format:
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx	file1.txt
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx	file2.txt
 ```
+- BREAKING: Only print basename of files in checksum files. Previous behaviour was to use the path name as is provided in the glob (after expanding), or simply using the file_name parameter.
+This behaviour is inconsistent, since GitHub releases does not have this directory structure (basically it's missing).
+Earlier:
+```
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx	path/to/file.txt
+...
+```
+Now:
+```
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx	file.txt
+...
+```
 
 ## [4.1.0] - 2023-01-DD
 - Add support for generating checksums automatically

@@ -54,7 +54,7 @@ export default async function uploadToRelease(
   const file_size = stat.size;
   const file_bytes = readFileSync(file);
   const checksum = calculateChecksum(file_bytes, checksum_algos);
-  checksums[file] = checksum;
+  checksums[asset_name] = checksum;
 
   // Check for duplicates
   const duplicate_asset = assets.find(a => a.name === asset_name);
